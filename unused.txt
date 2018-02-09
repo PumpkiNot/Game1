@@ -1,0 +1,225 @@
+items - update
+
+/*if(Item.IsHoldAble!=0){
+                int HoldNumber;
+                int HeldX, HeldY;
+                HeldX=Item.X;
+                HeldY=Item.Y;
+                if(Item.IsPrimary==1){
+                    HoldNumber=SecondaryId;
+                    SecondaryId=Item.IsHoldAble;
+                }else if(Item.IsPrimary==2){
+                    HoldNumber=UsableId;
+                    UsableId=Item.IsHoldAble;
+                }
+                Rooms[RoomPos[MapX][MapY]].ItemId=HoldNumber;
+                Item=ItemPre[HoldNumber];
+                Item.X=HeldX;
+                Item.Y=HeldY;
+            }*/
+
+
+
+
+
+
+void Save2(){
+    int Data2[20];
+    int I;
+    FILE *File;
+    File = fopen("SavedGame.save","w");
+
+    Data2[0]=Speed;
+    Data2[1]=JumpPower;
+    Data2[2]=Damage;
+    Data2[3]=Health;
+    Data2[4]=MaxHealth;
+    Data2[5]=Sheild;
+    Data2[6]=MaxSheild;
+    Data2[7]=Ammo;
+    Data2[8]=MaxAmmo;
+    Data2[9]=Charge;
+    Data2[10]=MaxCharge;
+    Data2[11]=ProAim;
+    Data2[12]=FireRate;
+    Data2[13]=RapidFire;
+    Data2[14]=SaftyPlat;
+    Data2[15]=RoomAmount;
+    Data2[16]=X;
+    Data2[17]=Y;
+    Data2[18]=MapX;
+    Data2[19]=MapY;
+
+    fwrite(Data2,sizeof(int),20,File);
+
+
+    for(I=0; I<RoomAmount; I++){
+        Room Rom = Rooms[I];
+        int Data[13];
+        Data[0] = Rom.X;
+        Data[1] = Rom.Y;
+        Data[2] = Rom.Area;
+        Data[3] = Rom.BigRoom;
+        Data[4] = Rom.Direct;
+        Data[5] = Rom.DropId;
+        Data[6] = Rom.DropX;
+        Data[7] = Rom.DropY;
+        Data[8] = Rom.Finished;
+        Data[9] = Rom.Width;
+        Data[10] = Rom.Height;
+        Data[11] = Rom.IsItemRoom;
+        Data[12] = Rom.ItemId;
+
+        fwrite(Data,sizeof(int),13,File);
+
+
+        char String[50];
+        strcpy(&String,(const char*)Rom.Type);
+        //strcat((char*)&String,(const char*)Temp);
+        printf("Saving %s\n",String);
+        fprintf(File,"%s",String);
+        //fprintf(File,"\n");
+    }
+    fclose(File);
+}
+
+void Load2(){
+    FILE *File;
+    File = fopen("SavedGame.save","r");
+    int line[13];
+    char line2[50];
+    line2[49]=0;
+    int Info[20];
+    int I,II;
+
+
+    // Read the normal info. In the hex editor, this is the first 5 lines.
+    // Length of 0x50 and 80
+    fread(&Info,sizeof(int),20,File);
+
+    Speed       =Info[0];
+    JumpPower   =*((int*)(&(Info[1])));
+    Damage      =*((int*)(&(Info[2])));
+    Health      =*((int*)(&(Info[3])));
+    MaxHealth   =*((int*)(&(Info[4])));
+    Sheild      =*((int*)(&(Info[5])));
+    MaxSheild   =*((int*)(&(Info[6])));
+    Ammo        =*((int*)(&(Info[7])));
+    MaxAmmo     =*((int*)(&(Info[8])));
+    Charge      =*((int*)(&(Info[9])));
+    MaxCharge   =*((int*)(&(Info[10])));
+    ProAim      =*((int*)(&(Info[11])));
+    FireRate    =*((int*)(&(Info[12])));
+    RapidFire   =*((int*)(&(Info[13])));
+    SaftyPlat   =*((int*)(&(Info[14])));
+    RoomAmount  =*((int*)(&(Info[15])));
+    X           =*((int*)(&(Info[16])));
+    Y           =*((int*)(&(Info[17])));
+    MapX        =*((int*)(&(Info[18])));
+    MapY        =*((int*)(&(Info[19])));
+
+    printf("%d\n",MapX);
+
+
+    printf("There are %d rooms in total.\n",RoomAmount);
+    for(I=0; I<RoomAmount; I++){
+        Room Rom = Rooms[I];
+        // Length of 52 and 0x34
+        fread(&line,4,13,File);
+
+        Rom.X       =*((int*)(&(line[0])));
+        Rom.Y       =*((int*)(&(line[1])));
+        Rom.Area    =*((int*)(&(line[2])));
+        Rom.BigRoom =*((int*)(&(line[3])));
+        Rom.Direct  =*((int*)(&(line[4])));
+        Rom.DropId  =*((int*)(&(line[5])));
+        Rom.DropX   =*((int*)(&(line[6])));
+        Rom.DropY   =*((int*)(&(line[7])));
+        Rom.Finished    =*((int*)(&(line[8])));
+        Rom.Width   =*((int*)(&(line[9])));
+        Rom.Height  =*((int*)(&(line[10])));
+        Rom.IsItemRoom  =*((int*)(&(line[11])));
+        Rom.ItemId  =*((int*)(&(line[12])));
+
+
+        for(II=0; II<13; II++){
+            printf("%d\n",*((int*)(&(line[II]))));
+        }
+
+        // Read the string until it finds the newline character
+        int _startReadingIndex;
+        for (_startReadingIndex=0;;_startReadingIndex++){
+            fread((char*)(&(((char*)line2)[_startReadingIndex])),1,1,File);
+            if (((char*)line2)[_startReadingIndex]==0){
+                break;
+            }
+        }
+        /*if(Rom.BigRoom!=0||(Rom.X==30&&Rom.Y==30)){
+            fread(&line2,1,13,File);
+        }else{
+            fread(&line2,1,16,File);
+        }*/
+
+
+
+        //fseek(File,1,SEEK_CUR);
+        strcpy((char*)&Rom.Type,(const char*)line2);
+        printf("Before printing the stupidity.\n");
+        printf(line2);
+        printf("\nWith another new line, done printing stupidity\n");
+
+        //strcpy((char*)&Rom.Type,"a/1234/1.txt");
+
+        printf("=======================\n");
+
+        RoomPos[Rom.X][Rom.Y]=I;
+        Rom.Id=I;
+    }
+
+    fclose(File);
+}
+
+
+
+/// == -- == moving blocks == -- == ///
+        else if(intersept(X,Y,TileSize,TileSize,Enemys[AA].X,Enemys[AA].Y,TileSize,TileSize)&&(Enemys[AA].Type==5||Enemys[AA].Type==6)){
+
+            if(Y<Enemys[AA].Y && abs(X+TileSize-Enemys[AA].X)>abs(Y+TileSize-Enemys[AA].Y)){
+                Y=Enemys[AA].Y-TileSize;
+                Falling=0;
+            }else if(Y>Enemys[AA].Y && abs(X-Enemys[AA].X)<abs(Y-Enemys[AA].Y)){
+                SpdY=0;
+                Y=Enemys[AA].Y+TileSize;
+            }
+            if(X<Enemys[AA].X && abs(X+TileSize-Enemys[AA].X)<abs(Y+TileSize-Enemys[AA].Y)){
+                if(Enemys[AA].SpdX<0){
+                    SpdX=Enemys[AA].SpdX;
+                }else{
+                    SpdX=-2;
+                }
+                X=Enemys[AA].X-TileSize;
+            }else if(X>Enemys[AA].X && abs(X-Enemys[AA].X)>abs(Y-Enemys[AA].Y)){
+                if(Enemys[AA].SpdX<0){
+                    SpdX=2;
+                }else{
+                    SpdX=Enemys[AA].SpdX;
+                }
+                X=Enemys[AA].X+TileSize;
+            }
+        }
+
+	/*color(0,0,0,255);
+        FillRect(200+Width/2-716/2-15,Height/8-30,736,60);
+        color(255,255,255,255);
+        FillRect(200+Width/2-716/2-10,Height/8-25,726,50);*/
+
+	color(0,0,0,255);
+        FillRect(200+Width/2-277,Height/4-25,554,50);
+        color(255,255,255,255);
+        FillRect(200+Width/2-272,Height/4-20,544,40);
+
+	color(0,0,0,255);
+        FillRect(200+Width/2-277,Height/4-25,554,50);
+        color(255,255,255,255);
+        FillRect(200+Width/2-272,Height/4-20,544,40);
+

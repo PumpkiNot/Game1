@@ -1,0 +1,62 @@
+# depslib dependency file v1.0
+1518153875 source:c:\users\matt\desktop\game1\main.c
+	<stdio.h>
+	<stdlib.h>
+	<SDL2/SDL.h>
+	<time.h>
+	"Happyfpscap.h"
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_mixer.h>
+	<SDL2/SDL_net.h>
+	"Sound.h"
+	"Image.h"
+	"Bullets.h"
+	"drops.h"
+	"items.h"
+	"Enemy1.h"
+	"Boss1.h"
+	"FloorMap.h"
+	"DrawFunctions.h"
+	"cutscene.h"
+	"multiplayer.h"
+	"menu.h"
+	"PlayerStuff.h"
+	"Usable.h"
+	"Map.h"
+
+1514325975 c:\users\matt\desktop\game1\happyfpscap.h
+
+1516526578 c:\users\matt\desktop\game1\sound.h
+
+1517985298 c:\users\matt\desktop\game1\cutscene.h
+
+1516856870 c:\users\matt\desktop\game1\image.h
+
+1518152959 c:\users\matt\desktop\game1\bullets.h
+	<math.h>
+
+1514163371 c:\users\matt\desktop\game1\drops.h
+	<math.h>
+
+1518056273 c:\users\matt\desktop\game1\items.h
+
+1518040269 c:\users\matt\desktop\game1\enemy1.h
+
+1518040124 c:\users\matt\desktop\game1\boss1.h
+
+1516671128 c:\users\matt\desktop\game1\floormap.h
+	<string.h>
+
+1518030413 c:\users\matt\desktop\game1\drawfunctions.h
+	<string.h>
+
+1518039730 c:\users\matt\desktop\game1\playerstuff.h
+
+1514872181 c:\users\matt\desktop\game1\usable.h
+
+1518038745 c:\users\matt\desktop\game1\map.h
+
+1518054671 c:\users\matt\desktop\game1\menu.h
+
+1518154027 c:\users\matt\desktop\game1\multiplayer.h
+
